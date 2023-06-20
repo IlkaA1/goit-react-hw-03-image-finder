@@ -58,16 +58,15 @@ export class App extends Component {
     ) {
       this.setState({ isLoading: true });
 
-      if (this.state.searchQuery !== prevState.searchQuery) {
-        this.setState({ articles: [(prevState.articles = [])] });
-      }
-
       try {
         await fetchArticlesWithQuery(
           this.state.searchQuery,
           this.state.page
         ).then(res => {
           const { hits, totalHits } = res.data;
+          if (this.state.searchQuery !== prevState.searchQuery) {
+            this.setState({ articles: [(prevState.articles = [])] });
+          }
 
           if (hits.length > 0) {
             this.setState({
@@ -114,7 +113,9 @@ export class App extends Component {
           />
         )}
         {error ? Notiflix.Notify.failure('Error!!!') : null}
-        <ImageGallery articles={articles} clickOnImg={this.clickOnImg} />
+        {articles === [] ? null : (
+          <ImageGallery articles={articles} clickOnImg={this.clickOnImg} />
+        )}
         {showModal ? (
           <Modal img={webformatURL} closeModal={this.closeModal} />
         ) : null}
