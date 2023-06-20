@@ -1,6 +1,6 @@
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import css from './ImageGallery.module.css';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
 const ImageGallery = ({ articles, clickOnImg }) => {
   return (
