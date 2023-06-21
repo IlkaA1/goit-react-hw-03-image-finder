@@ -1,6 +1,6 @@
 import { fetchArticlesWithQuery } from '../services/services';
 import React, { Component } from 'react';
-import { ColorRing } from 'react-loader-spinner';
+// import { ColorRing } from 'react-loader-spinner';
 import Notiflix from 'notiflix';
 import css from './app.module.css';
 
@@ -8,6 +8,7 @@ import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Button from './Button/Button';
 import Modal from './Modal/Modal';
+import Loader from './Loader/Loader';
 
 export class App extends Component {
   state = {
@@ -21,15 +22,13 @@ export class App extends Component {
     showModal: false,
   };
 
-  ClickOnSubmit = evt => {
-    evt.preventDefault();
-
-    const searchQuery = evt.target.searchQuery.value;
+  сlickOnSubmit = searchQuery => {
     this.setState({
       searchQuery,
+      page: 1,
+      articles: [],
+      error: false,
     });
-
-    evt.target.reset();
   };
 
   clickOnImg = img => {
@@ -45,7 +44,7 @@ export class App extends Component {
     }
   };
 
-  ClickOnButton = evt => {
+  сlickOnButton = evt => {
     this.setState(prev => {
       return { page: prev.page + 1 };
     });
@@ -100,18 +99,8 @@ export class App extends Component {
 
     return (
       <div className={css.App}>
-        <Searchbar onSubmit={this.ClickOnSubmit} />
-        {isLoading && (
-          <ColorRing
-            visible={true}
-            height="80"
-            width="80"
-            ariaLabel="blocks-loading"
-            wrapperStyle={{}}
-            wrapperClass="blocks-wrapper"
-            colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
-          />
-        )}
+        <Searchbar onSubmit={this.сlickOnSubmit} />
+        {isLoading && <Loader />}
         {error ? Notiflix.Notify.failure('Error!!!') : null}
         {articles === [] ? null : (
           <ImageGallery articles={articles} clickOnImg={this.clickOnImg} />
@@ -120,7 +109,7 @@ export class App extends Component {
           <Modal img={webformatURL} closeModal={this.closeModal} />
         ) : null}
 
-        {loadMore && <Button onClick={this.ClickOnButton} />}
+        {loadMore && <Button onClick={this.сlickOnButton} />}
       </div>
     );
   }
